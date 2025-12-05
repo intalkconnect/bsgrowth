@@ -17,7 +17,7 @@ async function uploadPdfToR2(buffer, fileName = 'documento') {
   const dd = String(now.getDate()).padStart(2, '0');
 
   const safeFileName = String(fileName).replace(/[^a-zA-Z0-9_.@-]/g, '_');
-  const key = `${R2_PDF_BASE_FOLDER}/${yyyy}/${mm}/${dd}/${safeFileName}_${now.getTime()}.pdf`;
+  const key = `${safeFileName}.pdf`;
 
   const putCommand = new PutObjectCommand({
     Bucket: R2_BUCKET,
