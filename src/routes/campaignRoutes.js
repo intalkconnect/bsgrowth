@@ -35,7 +35,6 @@ router.post('/growth', async (req, res) => {
         nf,
         placa,
         telefone,
-        dataHoraEnvio,
         base64
       }
     });
