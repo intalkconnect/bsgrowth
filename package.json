@@ -1,0 +1,20 @@
+{
+  "name": "blip-campaign-pdf",
+  "version": "1.0.0",
+  "description": "API para receber payload de campanha, salvar PDF no Cloudflare R2 e reenviar comando ao BLiP",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.943.0",
+    "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
