@@ -60,10 +60,17 @@ async function processCampaignJob(job) {
     );
   }
 
-  // 2) Nome "amigável" do arquivo com base em ticket/telefone
+  // 2) Nome "amigável" do arquivo: Ticket_$ticket_hhmmss
   const safeTicket = ticket || 'romaneio';
-  const safeTelefone = telefone || 'destino';
-  const fileName = `${safeTicket}_${safeTelefone}`;
+
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, '0');
+  const min = String(now.getMinutes()).padStart(2, '0');
+  const ss = String(now.getSeconds()).padStart(2, '0');
+  const timePart = `${hh}${min}${ss}`;
+
+  // Exemplo: Ticket_12345_142355
+  const fileName = `Ticket_${safeTicket}_${timePart}`;
 
   // 3) Upload no R2
   const { uri: pdfUrl, size } = await uploadPdfToR2(pdfBuffer, fileName);
@@ -72,11 +79,12 @@ async function processCampaignJob(job) {
 
   const id = job.id || generateId();
 
-  const dateSuffix = formatDateDdMMAAhhmmss(dataHoraEnvio);
+  // usa data/hora atual para o sufixo do nome da campanha
+  const dateSuffix = formatDateDdMMAAhhmmss();
   const campaignName = `Romaneio - ${safeTicket} | ${dateSuffix}`;
 
   // data/hora atual para ativo_enviado_em
-  const nowIso = new Date().toISOString();
+  const nowIso = now.toISOString();
 
   const commandPayload = {
     id,
@@ -96,17 +104,17 @@ async function processCampaignJob(job) {
       audience: {
         recipient: telefone,
         messageParams: {
-          '1': pdfUrl,
+          '1': pdfUrl,        // URL do PDF
           '2': nomeProdutor,
           '3': ticket,
           '4': nf,
           '5': placa,
-           ativo_enviado_em: nowIso
+          ativo_enviado_em: nowIso
         }
       },
       message: {
         messageTemplate: 'romaneio_file',
-        messageParams: ['1', '2', '3', '4','5'],
+        messageParams: ['1', '2', '3', '4', '5'],
         channelType: 'WhatsApp'
       }
     }
