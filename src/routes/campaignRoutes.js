@@ -2,17 +2,6 @@ const express = require('express');
 const router = express.Router();
 const campaignQueue = require('../queue/campaignQueue');
 
-// POST /api/campaign-pdf
-// Body esperado:
-// {
-//   "nomeProdutor": "",
-//   "ticket": "",
-//   "nf": "",
-//   "placa": "",
-//   "telefone": "",
-//   "dataHoraEnvio": "",
-//   "base64": ""
-// }
 router.post('/growth', async (req, res) => {
   const {
     nomeProdutor,
@@ -20,7 +9,6 @@ router.post('/growth', async (req, res) => {
     nf,
     placa,
     telefone,
-    dataHoraEnvio,
     base64
   } = req.body || {};
 
@@ -58,8 +46,6 @@ router.post('/growth', async (req, res) => {
       pdfUrl: result.pdfUrl,
       pdfSize: result.pdfSize,
       blipResult: result.blipResult
-      // Se quiser debugar o payload enviado para o BLiP, pode incluir:
-      // blipCommand: result.blipCommand
     });
   } catch (err) {
     console.error('Erro ao processar campanha:', err?.message || err);
