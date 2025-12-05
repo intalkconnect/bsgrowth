@@ -39,7 +39,6 @@ async function processCampaignJob(job) {
     nf,
     placa,
     telefone,
-    dataHoraEnvio,
     base64
   } = payload;
 
