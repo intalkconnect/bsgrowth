@@ -1,7 +1,7 @@
 {
-  "name": "blip-campaign-pdf",
+  "name": "blip-campaign",
   "version": "1.0.0",
-  "description": "API para receber payload de campanha, salvar PDF no Cloudflare R2 e reenviar comando ao BLiP",
+  "description": "API para receber payload de campanha, salvar PDF na Azure e reenviar comando ao BLiP",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
