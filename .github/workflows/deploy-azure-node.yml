@@ -1,0 +1,47 @@
+name: Deploy APIBLIP to Azure Web App
+
+on:
+  push:
+    branches: [ "main" ]   # ajuste a branch se for diferente
+  workflow_dispatch:        # permite rodar manualmente pelo Actions
+
+env:
+  # Nome do Web App no Azure (é o prefixo da URL: apiblip-g8fkhuhyb0d3efgx.azurewebsites.net)
+  AZURE_WEBAPP_NAME: "apiblip-g8fkhuhyb0d3efgx"
+
+  # Caminho do projeto dentro do repositório
+  AZURE_WEBAPP_PACKAGE_PATH: "."
+
+  # Versão do Node usada no build
+  NODE_VERSION: "20.x"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Instalar dependências e build
+        run: |
+          npm ci
+          npm run build --if-present
+        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      # Se você tiver testes, pode descomentar isso:
+      # - name: Rodar testes
+      #   run: npm test
+      #   working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Deploy para Azure Web App (Zip Deploy)
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
