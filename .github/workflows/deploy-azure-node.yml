@@ -7,7 +7,7 @@ on:
 
 env:
   # Nome do Web App no Azure (é o prefixo da URL: apiblip-g8fkhuhyb0d3efgx.azurewebsites.net)
-  AZURE_WEBAPP_NAME: "apiblip-g8fkhuhyb0d3efgx"
+  AZURE_WEBAPP_NAME: "APIBLIP"
 
   # Caminho do projeto dentro do repositório
   AZURE_WEBAPP_PACKAGE_PATH: "."
