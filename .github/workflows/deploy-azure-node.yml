@@ -13,7 +13,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: "."
 
   # Versão do Node usada no build
-  NODE_VERSION: "20.x"
+  NODE_VERSION: "22.x"
 
 jobs:
   build-and-deploy:
