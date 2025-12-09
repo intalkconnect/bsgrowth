@@ -20,8 +20,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'https://apiblip-g8fkhuhyb0d3efgx.brazilsouth-01.azurewebsites.net', // ajuste para o host de produção se precisar
-        description: 'Servidor local'
+        url: 'https://apiblip-g8fkhuhyb0d3efgx.brazilsouth-01.azurewebsites.net'
       }
     ],
     components: {
