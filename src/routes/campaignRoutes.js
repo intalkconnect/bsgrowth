@@ -2,6 +2,70 @@ const express = require('express');
 const router = express.Router();
 const campaignQueue = require('../queue/campaignQueue');
 
+/**
+ * @swagger
+ * /api/growth:
+ *   post:
+ *     summary: Processa campanha e envia PDF ao BLiP.
+ *     tags:
+ *       - Campaign
+ *     security:
+ *       - ApiTokenAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - telefone
+ *               - base64
+ *             properties:
+ *               nomeProdutor:
+ *                 type: string
+ *                 description: Nome do produtor.
+ *               ticket:
+ *                 type: string
+ *                 description: Número do ticket.
+ *               nf:
+ *                 type: string
+ *                 description: Número da nota fiscal.
+ *               placa:
+ *                 type: string
+ *                 description: Placa do veículo.
+ *               telefone:
+ *                 type: string
+ *                 description: Número do WhatsApp do destinatário (com DDD).
+ *                 example: "5511999999999"
+ *               base64:
+ *                 type: string
+ *                 description: PDF em base64.
+ *     responses:
+ *       200:
+ *         description: Campanha processada com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 jobId:
+ *                   type: string
+ *                 pdfUrl:
+ *                   type: string
+ *                 pdfSize:
+ *                   type: integer
+ *                 blipResult:
+ *                   type: object
+ *       400:
+ *         description: Erro de validação.
+ *       401:
+ *         description: Não autorizado (token inválido ou ausente).
+ *       500:
+ *         description: Erro interno ao processar a campanha.
+ */
+
 router.post('/growth', async (req, res) => {
   const {
     nomeProdutor,
