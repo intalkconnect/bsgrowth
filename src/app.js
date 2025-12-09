@@ -1,3 +1,4 @@
+// src/app.js
 const express = require('express');
 const campaignRoutes = require('./routes/campaignRoutes');
 const auth = require('./middlewares/auth');
@@ -9,7 +10,6 @@ const app = express();
 
 app.use(express.json({ limit: '20mb' }));
 
-// Configuração Swagger
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -20,38 +20,48 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:3000', // ajuste se estiver em outro host
+        url: 'https://apiblip-g8fkhuhyb0d3efgx.brazilsouth-01.azurewebsites.net', // ajuste para o host de produção se precisar
         description: 'Servidor local'
       }
     ],
     components: {
       securitySchemes: {
-        ApiTokenAuth: {
-          type: 'apiKey',
-          in: 'header',
-          name: 'Authorization',
-          description: 'Use: `Bearer SEU_TOKEN_AQUI`'
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'Token',
+          description: 'Envie o header Authorization no formato: Bearer <TOKEN>.'
+        }
+      },
+      schemas: {
+        ErrorResponse: {
+          type: 'object',
+          properties: {
+            error: {
+              type: 'string',
+              example: 'Não autorizado. Token inválido.'
+            }
+          }
         }
       }
     },
+    // aplica bearer como padrão em todas as rotas (pode tirar se quiser só em algumas)
     security: [
       {
-        ApiTokenAuth: []
+        bearerAuth: []
       }
     ]
   },
-  apis: ['./src/routes/*.js'] // onde estão os JSDoc das rotas
+  apis: ['./src/routes/*.js']
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-// Rota pública da documentação
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Rotas protegidas
 app.use('/api', auth, campaignRoutes);
 
-// Healthcheck
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
