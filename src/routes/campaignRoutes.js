@@ -10,7 +10,7 @@ const campaignQueue = require('../queue/campaignQueue');
  *     tags:
  *       - Campaign
  *     security:
- *       - ApiTokenAuth: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -56,14 +56,47 @@ const campaignQueue = require('../queue/campaignQueue');
  *                   type: string
  *                 pdfSize:
  *                   type: integer
- *                 blipResult:
- *                   type: object
  *       400:
  *         description: Erro de validação.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               campoObrigatorio:
+ *                 summary: Campo obrigatório ausente
+ *                 value:
+ *                   error: "Campo 'telefone' é obrigatório."
  *       401:
- *         description: Não autorizado (token inválido ou ausente).
+ *         description: Não autorizado (problema com o header Authorization).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               semHeader:
+ *                 summary: Sem header Authorization
+ *                 value:
+ *                   error: "Não autorizado. Envie o header Authorization: Bearer <TOKEN>."
+ *               formatoInvalido:
+ *                 summary: Authorization sem Bearer
+ *                 value:
+ *                   error: "Formato inválido de Authorization. Use: Bearer <TOKEN>."
+ *               tokenInvalido:
+ *                 summary: Token incorreto
+ *                 value:
+ *                   error: "Não autorizado. Token inválido."
  *       500:
  *         description: Erro interno ao processar a campanha.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               erroGenerico:
+ *                 summary: Erro inesperado
+ *                 value:
+ *                   error: "Erro interno ao processar a campanha."
  */
 
 router.post('/growth', async (req, res) => {
